@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+
+namespace FormGenerator\Validation\Rules;
+
+use DateTimeImmutable;
+use FormGenerator\ErrorHandling\FormErrorHandler;
+use FormGenerator\Config\Globals;
+use FormGenerator\Validation;
+use FormGenerator\Validation\ValidationInterface;
+
+class Time extends Validation implements ValidationInterface
+{
+    /**
+     * Private constructor to prevent instantiation.
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+        ; // This constructor is private and empty; no code is executed here.
+    }
+
+    /**
+     * Validate that the provided string is a valid time.
+     *
+     * @param string $data
+     * @param array{test: string, modification?: string, value?: array<string>} $test
+     * @param bool $devMessage
+     * @param array{0: int|null, 1: int|null} $backtrace
+     * @throws \FormGenerator\ErrorHandling\FormGeneratorException
+     * @return bool|string
+     */
+    public static function check(
+        string $data,
+        array $test,
+        bool $devMessage,
+        array $backtrace = [8, 7]
+    ): bool|string {
+        if (trim($data) == '' || $data == Globals::INTERNAL_EMPTY) {
+            return Globals::INTERNAL_EMPTY;
+        }
+
+        $format = strlen($data) === 5 ? 'H:i' : 'H:i:s';
+        $d = DateTimeImmutable::createFromFormat($format, $data);
+
+        if ($d && $d->format($format) === $data) {
+            return true;
+        }
+
+        return FormErrorHandler::exceptionOrFalse(
+            "Validation error: The value '"
+                . Globals::esc($data) . "' is not a valid time.",
+            422,
+            "vE117",
+            $devMessage,
+            $backtrace
+        );
+    }
+}

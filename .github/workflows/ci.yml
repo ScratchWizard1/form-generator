@@ -1,0 +1,37 @@
+name: Run Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.3', '8.4']
+
+    name: PHP ${{ matrix.php-version }} - Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+
+      - name: Run tests
+        run: composer fg:test
+
+      - name: Run PHP Code Beautifier and Fixer
+        run: composer fg:cs-fix
+
+      - name: Check PSR12
+        run: composer fg:cs-check
+
+      - name: Run PHPStan
+        run: composer fg:stan

@@ -1,0 +1,15 @@
+
+/vendor/
+
+composer.lock
+phpunit.xml
+/.phpunit.cache/
+
+/.idea/
+/*.log
+/.DS_Store
+
+errorId.py
+
+coverage/
+
