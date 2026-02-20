@@ -44,7 +44,6 @@ use FormGenerator\Validation\Rules\Tel;
 use FormGenerator\Validation\Rules\Time;
 use FormGenerator\Validation\Rules\Url;
 use FormGenerator\Validation\Rules\Week;
-use GlobIterator;
 
 class Validation
 {
