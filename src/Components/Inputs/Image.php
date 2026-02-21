@@ -27,7 +27,7 @@ class Image extends BasicComponent
     /**
      * Generate the HTML for the image input.
      *
-    toStr@return string
+     * @return string
      */
     protected function getInput(): string
     {

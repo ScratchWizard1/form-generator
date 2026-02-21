@@ -42,12 +42,39 @@ Working with HTML forms in plain PHP often results in:
 composer require scratchwizard/form-generator
 ```
 
-### Requirements
+---
+
+## ⚙️ Requirements
+
+### Runtime
 
 - PHP >= 8.0 (tested on 8.3 and 8.4)
 - ext-json
+- Composer
+
+### Dependencies
+
+The following packages are installed automatically via Composer:
+
+- google/cloud-recaptcha-enterprise ^2.1
+- vlucas/phpdotenv ^5.5
+- giggsey/libphonenumber-for-php ^9.0
 
 ---
+
+## 🛠 Development (optional)
+
+If you want to contribute or run tests:
+
+- phpunit/phpunit ^12.0
+- squizlabs/php_codesniffer ^4.0
+- phpstan/phpstan ^2.0
+
+Install dev dependencies:
+
+```bash
+composer install
+```
 
 ## 🚀 Quick Example
 
@@ -127,6 +154,355 @@ No manual CSRF handling or hidden input management is required.
 
 ---
 
+## 🧱 Element Methods Overview
+
+All element methods are chainable and allow attribute configuration after creation.
+
+Example:
+
+```php
+$form->text("username")->required()->class("input");
+```
+
+---
+
+### 📋 Method Parameters
+
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| `text($name)` | string `$name` | Creates `<input type="text">` |
+| `email($name)` | string `$name` | Creates `<input type="email">` |
+| `password($name)` | string `$name` | Creates `<input type="password">` |
+| `number($name)` | string `$name` | Creates `<input type="number">` |
+| `tel($name)` | string `$name` | Creates `<input type="tel">` |
+| `url($name)` | string `$name` | Creates `<input type="url">` |
+| `search($name)` | string `$name` | Creates `<input type="search">` |
+| `date($name)` | string `$name` | Creates `<input type="date">` |
+| `datetime($name)` | string `$name` | Creates `<input type="datetime-local">` |
+| `time($name)` | string `$name` | Creates `<input type="time">` |
+| `month($name)` | string `$name` | Creates `<input type="month">` |
+| `week($name)` | string `$name` | Creates `<input type="week">` |
+| `range($name)` | string `$name` | Creates `<input type="range">` |
+| `color($name)` | string `$name` | Creates `<input type="color">` |
+| `checkbox($name)` | string `$name` | Creates `<input type="checkbox">` |
+| `radio($name)` | string `$name` | Creates `<input type="radio">` |
+| `file($name)` | string `$name` | Creates `<input type="file">` |
+| `hidden($name)` | string `$name` | Creates `<input type="hidden">` |
+| `textarea($name)` | string `$name` | Creates `<textarea>` |
+| `select($name)` | string `$name` | Creates `<select>` |
+| `button($name, $content)` | string `$name`, string `$content` | Creates `<button>` |
+| `submit($value)` | string `$value` | Creates `<input type="submit">` |
+| `reset($value)` | string `$value` | Creates `<input type="reset">` |
+| `image($name, $src, $alt)` | string `$name`, string `$src`, string `$alt` | Creates `<input type="image">` |
+| `label($text)` | string `$text` | Creates `<label>` |
+| `legend($text)` | string `$text` | Creates `<legend>` |
+| `fieldset()` | — | Opens `<fieldset>` |
+| `endFieldset()` | — | Closes `<fieldset>` |
+| `html($html)` | string `$html` | Inserts raw HTML |
+
+---
+
+## 🧩 Special Notes
+
+### Button
+
+```php
+$form->button("myBtn", "Click Me");
+```
+
+- `$name` → name attribute  
+- `$content` → inner HTML of `<button>`
+
+---
+
+### Image Input
+
+```php
+$form->image("submitImage", "/img/send.png", "Send");
+```
+
+- `$name` → name attribute  
+- `$src` → image source  
+- `$alt` → alternative text  
+
+---
+
+### Raw HTML
+
+```php
+$form->html("<p>Custom content</p>")->class("box");
+```
+
+- Accepts a valid HTML string including `< >`
+- Supports attribute chaining
+
+---
+
+## 🎛 Supported Attributes
+
+All elements share a unified attribute API.  
+Each attribute has a corresponding method.
+
+All methods are chainable.
+
+---
+
+## 📋 Attribute Methods Overview
+
+| Attribute | Method | Parameter Type | Notes |
+|------------|--------|----------------|-------|
+| id | `->id($value)` | string | Sets element ID |
+| name | `->name($value)` | string | Overrides generated name |
+| class | `->class($value)` | string | CSS classes |
+| style | `->style($value)` | string | Inline styles |
+| value | `->value($value)` | string | Input value |
+| placeholder | `->placeholder($value)` | string | Placeholder text |
+| title | `->title($value)` | string | Tooltip text |
+| dir | `->dir($value)` | string | Text direction |
+| onclick | `->onclick($value)` | string | JS handler |
+| pattern | `->pattern($value)` | string | Regex validation |
+| list | `->list($value)` | string | Datalist ID |
+| form | `->form($value)` | string | External form reference |
+| accept | `->accept($value)` | string | File types |
+| src | `->src($value)` | string | Image source |
+| alt | `->alt($value)` | string | Alternative text |
+| wrap | `->wrap($value)` | string | Textarea wrapping |
+| autocomplete | `->autocomplete($value)` | string | Default: `"on"` |
+
+---
+
+### 🔢 Numeric / Length Attributes
+
+| Attribute | Method | Parameter Type |
+|------------|--------|----------------|
+| minlength | `->minlength($value)` | int |
+| maxlength | `->maxlength($value)` | int |
+| size | `->size($value)` | int |
+| min | `->min($value)` | int\|float\|string |
+| max | `->max($value)` | int\|float\|string |
+| step | `->step($value)` | int\|float\|string (default: `"any"`) |
+| rows | `->rows($value)` | int |
+| cols | `->cols($value)` | int |
+| width | `->width($value)` | int |
+| height | `->height($value)` | int |
+
+---
+
+### ✅ Boolean Attributes
+
+These attributes do not require parameters.
+
+| Attribute | Method |
+|------------|--------|
+| required | `->required()` |
+| disabled | `->disabled()` |
+| readonly | `->readonly()` |
+| hidden | `->hidden()` |
+| autofocus | `->autofocus()` |
+| multiple | `->multiple()` |
+| checked | `->checked()` |
+| selected | `->selected()` |
+
+---
+
+## ⚠ Important Notes
+
+### 1️⃣ Null Values
+
+Although attributes are internally stored as nullable properties,  
+**public API methods do not accept `null` as a valid value.**
+
+If a value is not provided, the attribute is simply not rendered.
+
+---
+
+### 2️⃣ Attribute Compatibility
+
+If an attribute does not apply to a specific element, it is automatically ignored.
+
+Example:
+
+```php
+$form->text("username")->min(5);
+```
+
+Since `min()` applies only to numeric/date inputs, it will not be rendered.
+
+---
+
+### 3️⃣ Clean HTML Guarantee
+
+The form builder ensures:
+
+- No empty attributes
+- No invalid attributes
+- No duplicated attributes
+- Only relevant attributes are rendered
+
+This guarantees valid and clean HTML output.
+
+---
+
+## 🧩 Advanced: `setAttributes()`
+
+The `setAttributes()` method is available on **every element instance created by the builder**.
+
+This includes:
+
+- All input elements (`text()`, `email()`, `number()`, etc.)
+- Structural elements (`fieldset()`, `legend()`, `label()`)
+- Action elements (`button()`, `submit()`, `reset()`)
+- Select and textarea
+- Raw HTML elements created via `html()`
+
+In short:
+
+> Any component added through a builder method supports `setAttributes()`.
+
+---
+
+### Usage
+
+```php
+$form->text("username")
+     ->setAttributes([
+         'data-test' => 'example',
+         'aria-label' => 'Username field'
+     ]);
+```
+
+---
+
+## 🔝 Priority Rules
+
+`setAttributes()` has **higher priority** than fluent attribute methods.
+
+If the same attribute is defined in both places:
+
+```php
+$form->text("username")
+     ->id("secondaryId")
+     ->setAttributes(['id' => 'primaryId']);
+```
+
+The final rendered output will be:
+
+```html
+id="primaryId"
+```
+
+✔ Values defined in `setAttributes()` override values defined via fluent methods.
+
+---
+
+## 🗝 Key Rules
+
+- Keys **must always be strings**
+- The key represents the attribute name
+- The value represents the attribute value
+- Keys may be **any valid HTML attribute name**
+- Custom attributes are fully supported:
+  - `data-*`
+  - `aria-*`
+  - Standard attributes (`id`, `class`, `style`, etc.)
+  - Non-standard attributes (if valid in HTML context)
+
+Examples of valid keys:
+
+```php
+'data-user' => '123'
+'aria-label' => 'Form'
+'custom-attribute' => 'value'
+```
+
+In short:
+
+> Any attribute name that is valid in HTML may be used as a key.
+
+Example:
+
+```php
+$form->email("email")
+     ->setAttributes([
+         'data-tracking' => 'enabled',
+         'aria-required' => 'true'
+     ]);
+```
+
+---
+
+## 🧠 Value Handling Rules
+
+| Value Type | Rendering Result |
+|------------|------------------|
+| `string` | Rendered as `attribute="value"` |
+| `int` / `float` | Rendered as `attribute="number"` |
+| `true` | Rendered as a boolean attribute (e.g. `required`) |
+| `'true'` (string) | Rendered as `attribute="true"` |
+| `false` / `null` | Attribute is not rendered |
+| `array` (for `class` / `style`) | Values are merged automatically |
+
+---
+
+### Boolean Example
+
+```php
+$form->text("username")
+     ->setAttributes([
+         'required' => true
+     ]);
+```
+
+Output:
+
+```html
+required
+```
+
+But:
+
+```php
+$form->text("username")
+     ->setAttributes([
+         'required' => 'true'
+     ]);
+```
+
+Output:
+
+```html
+required="true"
+```
+
+---
+
+## 🎯 When to Use `setAttributes()`
+
+Use `setAttributes()` when:
+
+- You need full control over the rendered attributes
+- You want to add custom attributes
+- You want to override fluent method values
+- You are dynamically generating attribute sets
+- You are working with `data-*` or `aria-*` attributes
+
+---
+
+## 🔐 Clean HTML Guarantee
+
+When using `setAttributes()`:
+
+- Duplicate attributes are not rendered multiple times (last value wins)
+- Attribute keys are always rendered as HTML attributes (even custom ones)
+- Empty string values are rendered as empty attributes (e.g. `attribute=""`)
+- Boolean `true` renders attribute without value (e.g. `required`)
+- Attribute precedence is respected (`setAttributes()` overrides fluent methods)
+- HTML output remains valid and well-formed
+
+In short:
+
+> `setAttributes()` always renders the attributes you specify in a valid HTML form.
+
 ## 📥 Receiving & Validating Data
 
 FormGenerator automatically extracts and validates submitted form data.
@@ -146,16 +522,8 @@ if ($result->isValid()) {
 } else {
     $error = $result->getError(); // returns one error at a time
 }
+
 ```
-
-### Validation Rules Used
-
-| Rule | Description |
-|------|------------|
-| string | Must be a string |
-| email | Must be a valid email address |
-| required | Field must be present and not empty |
-| minlength | Minimum number of characters |
 
 ### Example Outputs
 
@@ -181,6 +549,50 @@ if ($result->isValid()) {
 ```
 
 > Each error always has a unique `id` and code for consistent handling. Only one error is returned at a time.
+
+---
+
+## 🛡️ Validation Rules (All Supported Rules)
+
+| Rule | Aliases | Description |
+|------|----------|-------------|
+| Alpha | `a`, `al`, `alpha` | Letters only |
+| AlphaNumber | `an`, `aln`, `alphan`, `alnum`, `alphanum`, `alphanumber` | Letters and numbers |
+| Boolean | `b`, `bool`, `boolean` | Must be boolean |
+| Color | `c`, `color` | Valid color value |
+| Date | `d`, `date` | Valid date |
+| DateTime | `dt`, `datetime` | Valid datetime |
+| Email | `e`, `mail`, `email` | Valid email address |
+| Enum | `in`, `en`, `enum` | Must be one of allowed values |
+| Nenum | `nin`, `nen`, `nenum` | Must NOT be one of allowed values |
+| Equal | `eq`, `equal` | Must equal given value |
+| Nequal | `neq`, `nequal` | Must NOT equal given value |
+| Extension | `ex`, `exten`, `extension` | File extension check |
+| Mime | `mim`, `mime` | MIME type check |
+| File | `f`, `file` | File input |
+| Format | `fo`, `for`, `form`, `format` | Format validation |
+| Ip | `i`, `ip` | Valid IP address |
+| Json | `j`, `json` | Valid JSON |
+| Length | `l`, `len`, `length` | Exact length |
+| Max | `ma`, `max` | Maximum numeric value |
+| MaxLength | `mal`, `malen`, `malength`, `maxl`, `maxlen`, `maxlength` | Maximum length |
+| MaxWords | `maw`, `maword`, `mawords`, `maxw`, `maxword`, `maxwords` | Maximum word count |
+| Min | `mi`, `min` | Minimum numeric value |
+| MinLength | `mil`, `milen`, `milength`, `minl`, `minlen`, `minlength` | Minimum length |
+| MinWords | `miw`, `miword`, `miwords`, `minw`, `minword`, `minwords` | Minimum word count |
+| Month | `m`, `month` | Valid month |
+| Number | `n`, `num`, `number` | Numeric value |
+| Null | `null` | Must be null |
+| NotNull | `nnull`, `notnull` | Must NOT be null |
+| Password | `p`, `pas`, `pass`, `password` | Password validation |
+| Regex | `re`, `reg`, `regex` | Regular expression match |
+| Required | `r`, `req`, `required` | Field is required |
+| Size | `si`, `size` | File size validation |
+| StringRule | `s`, `str`, `string` | String validation |
+| Tel | `te`, `tel` | Telephone number |
+| Time | `ti`, `time` | Valid time |
+| Url | `u`, `url` | Valid URL |
+| Week | `w`, `week` | Valid week |
 
 ## 🔎 Standalone Validation
 
