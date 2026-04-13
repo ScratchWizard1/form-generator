@@ -1,0 +1,58 @@
+{
+    "name": "scratchwizard1/form-generator",
+    "description": "Lightweight PHP library for generating and validating HTML forms without any framework dependencies.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "form",
+        "generator",
+        "php",
+        "validation",
+        "html",
+        "library"
+    ],
+    "version": "1.0.0",
+    "homepage": "https://github.com/ScratchWizard1/form-generator",
+    "support": {
+        "issues": "https://github.com/ScratchWizard1/form-generator/issues",
+        "source": "https://github.com/ScratchWizard1/form-generator"
+    },
+    "authors": [
+        {
+            "name": "ScratchWizard1",
+            "email": "bezek.palino@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-json": "*",
+        "google/cloud-recaptcha-enterprise": "^2.1",
+        "vlucas/phpdotenv": "^5.5",
+        "giggsey/libphonenumber-for-php": "^9.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.0",
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "FormGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FormGenerator\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "fg:test": "phpunit",
+        "fg:cs": "composer run-script fg:cs-fix && composer run-script fg:cs-check",
+        "fg:cs-fix": "vendor/bin/phpcbf --standard=PSR12 src/ tests/",
+        "fg:cs-check": "vendor/bin/phpcs --standard=PSR12 src/ tests/",
+        "fg:stan": "vendor/bin/phpstan analyse"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
